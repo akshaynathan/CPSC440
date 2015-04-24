@@ -13,7 +13,7 @@ void print_matrix(double *a, int n) {
   int i, k;
   for (i = 0; i < n; i++) {
     for (k = 0; k < n; k++) {
-      printf("%.10g", M(a, i, k, n));
+      printf("%.16f", M(a, i, k, n));
       if (k != n - 1)
         printf(" ");
     }
@@ -65,6 +65,7 @@ void zero_matrix(double *a, int n) {
 // Multiplies a * b = res
 void multiply_matrix(double *a, double *b, double *res, int n) {
   int i, k, r;
+  zero_matrix(res, n);
   for (i = 0; i < n; i++)
     for (k = 0; k < n; k++)
       for (r = 0; r < n; r++)
@@ -121,4 +122,15 @@ void inv_double_gs(double *a, int n, double *u, double *b) {
   // Cleanup memory
   free(identity);
   free(orthTranspose);
+}
+
+int main(int argc, char** argv) {
+  double test[9] = {1.0, 1.0, 1.0, 0, 10e-6, 0, 0, 0, 432e-6};
+  double *m = malloc(sizeof(double) * 9);
+  double *u = malloc(sizeof(double) * 9);
+  inv_double_gs(test, 3, u, m);
+  print_matrix(m, 3);
+  multiply_matrix(m, test, u, 3);
+  print_matrix(u, 3);
+  return 0;
 }
